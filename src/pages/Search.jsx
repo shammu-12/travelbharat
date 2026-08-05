@@ -1,103 +1,13 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import states from "../data/states";
+import { categoryList } from "../data/destinations";
+import { useCatalog } from "../context/CatalogContext";
 
-function Search() {
-  const [searchTerm, setSearchTerm] = useState("");
+export default function Search() {
+  const { destinations } = useCatalog();
+  const [term, setTerm] = useState("");
+  const [category, setCategory] = useState("All");
+  const items = useMemo(() => destinations.filter((item) => (`${item.name} ${item.state.name}`).toLowerCase().includes(term.toLowerCase()) && (category === "All" || item.category === category)), [destinations, term, category]);
 
-  const results = states.filter((state) =>
-    state.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  return (
-    <section className="search-page">
-
-      <div className="search-header">
-        <h1>Search India</h1>
-
-        <p>
-          Find states and discover amazing places across India.
-        </p>
-
-        <input
-          type="text"
-          className="search-box"
-          placeholder="Search for a state..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
-
-      <div className="search-results">
-
-        {searchTerm === "" ? (
-          <div className="search-message">
-            <div>🔎</div>
-
-            <h2>Start Exploring</h2>
-
-            <p>
-              Type a state name above to find your destination.
-            </p>
-          </div>
-        ) : results.length === 0 ? (
-          <div className="search-message">
-            <div>😕</div>
-
-            <h2>No State Found</h2>
-
-            <p>
-              We couldn't find a state matching "{searchTerm}".
-            </p>
-
-            <Link to="/states" className="btn">
-              View All States
-            </Link>
-          </div>
-        ) : (
-          <>
-            <h2 className="search-results-title">
-              Search Results
-            </h2>
-
-            <div className="states-grid">
-
-              {results.map((state) => (
-                <div className="state-card" key={state.name}>
-
-                  <img
-                    src={state.image}
-                    alt={state.name}
-                  />
-
-                  <div className="state-card-content">
-
-                    <h3>{state.name}</h3>
-
-                    <p>
-                      {state.description}
-                    </p>
-
-                    <Link
-                      to={`/state/${encodeURIComponent(state.name)}`}
-                    >
-                      Explore State →
-                    </Link>
-
-                  </div>
-
-                </div>
-              ))}
-
-            </div>
-          </>
-        )}
-
-      </div>
-
-    </section>
-  );
+  return <main className="page search-page"><div className="page-heading"><p className="intro-label">SEARCH & DISCOVERY</p><h1>Find your next destination</h1><input autoFocus className="filter-input large-input" value={term} onChange={(event) => setTerm(event.target.value)} placeholder="Search place or state…" /><div className="category-filters">{categoryList.map((item) => <button onClick={() => setCategory(item)} className={category === item ? "selected" : ""} key={item}>{item}</button>)}</div></div><p className="result-count">{items.length} destinations found {category !== "All" && `in ${category}`}</p><div className="search-grid">{items.map((item) => <Link to={`/places/${encodeURIComponent(item.name)}?state=${item.state.id}`} className="search-card" key={`${item.name}-${item.state.id}`}><img src={item.image} alt="" /><div><p>{item.state.name} · {item.category}</p><h2>{item.name}</h2><span>View details →</span></div></Link>)}</div>{items.length === 0 && <div className="search-empty">No destinations match this search. Try another word or category.</div>}</main>;
 }
-
-export default Search;

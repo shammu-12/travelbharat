@@ -1,35 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
-function Navbar() {
-  return (
-    <nav className="navbar">
-
-      <Link to="/" className="navbar-logo">
-        🇮🇳 TravelBharat
-      </Link>
-
-      <div className="navbar-links">
-
-        <Link to="/">
-          Home
-        </Link>
-
-        <Link to="/states">
-          States
-        </Link>
-
-        <Link to="/search">
-          Search
-        </Link>
-
-        <Link to="/about">
-          About
-        </Link>
-
-      </div>
-
-    </nav>
-  );
+export default function Navbar() {
+  return <header className="navbar"><div className="navbar-container">
+    <Link to="/" className="navbar-logo"><span>✦</span>Travel<span>Bharat</span></Link>
+    <nav className="navbar-links"><NavLink to="/">Home</NavLink><NavLink to="/states">Explore States</NavLink><NavLink to="/search">Search</NavLink><NavLink to="/about">About</NavLink></nav>
+    <Link to="/login?mode=admin" className="nav-admin">Admin →</Link>
+  </div></header>;
 }
-
-export default Navbar;
