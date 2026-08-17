@@ -1,3 +1,17 @@
+const localStateImages = {
+  "Andhra Pradesh": "/images/destinations/amaravati[1].jpg",
+  "Arunachal Pradesh": "/images/destinations/arunachal_pradesh[1].jpg",
+  Assam: "/images/destinations/assam[1].jpg",
+  Bihar: "/images/destinations/bihar[1].jpg",
+  Chhattisgarh: "/images/destinations/chattisgarh[1].jpg",
+  Goa: "/images/destinations/goa[1].jpg",
+  Gujarat: "/images/destinations/gujarat[1].jpg",
+  Haryana: "/images/destinations/haryana[1].jpg",
+  "Himachal Pradesh": "/images/destinations/himachal_pradesh[1].jpg",
+  Jharkhand: "/images/destinations/jharkhand[2].jpg",
+  Karnataka: "/images/destinations/Mysore_Palace[1].jpg"
+};
+
 const states = [
 {
   id: 1,
@@ -954,4 +968,7 @@ const states = [
 },
 ];
 
-export default states;
+export default states.map((state) => ({
+  ...state,
+  image: localStateImages[state.name] || state.image
+}));
